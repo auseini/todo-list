@@ -1,27 +1,27 @@
 import { toDate, isToday, isThisWeek, subDays } from 'date-fns';
-
+import Task from './Task';
 
 export default class Project{
     constructor(name){
-        this.name = name;
-        this.tasks = [];
+        this._name = name;
+        this._tasks = [];
     }
 
     //func to set name
-    setName(name){
-        this.name = name;
+    set name(name){
+        this._name = name;
     }
     //func to get name
     get name(){
-        return this.name;
+        return this._name;
     }
     //func to import tasks
-    setTasks(tasks){
-        this.tasks = tasks;
+    set tasks(tasks){
+        this._tasks = tasks;
     }
     //func to get tasks
     get tasks(){
-        return this.tasks;
+        return this._tasks;
     }
 
     //function to get specific task

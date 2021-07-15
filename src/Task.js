@@ -2,33 +2,33 @@ import { toDate, isToday, isThisWeek, subDays } from 'date-fns';
 
 export default class Task{
     constructor(name){
-        this.name = name;
-        this.date = "No Date";
-        this.description = "";
+        this._name = name;
+        this._date = "No Date";
+        this._description = "";
     }
 
     //getters/setters for name
     set name(name){
-        this.name = name;
+        this._name = name;
     }
     get name(){
-        return this.name;
+        return this._name;
     }
 
     //setters/getters for date
     set date(date){
-        this.date = date;
+        this._date = date;
     }
     get date(){
-        return this.date;
+        return this._date;
     }
 
     //setters/getters for disc
     set description(description){
-        this.description = description;
+        this._description = description;
     }
     get description(){
-        return this.description;
+        return this._description;
     }
 
 }

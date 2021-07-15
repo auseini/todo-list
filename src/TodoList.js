@@ -1,21 +1,21 @@
-import Project from "./project";
-import Task from "./task";
+import Project from "./Project";
+import Task from "./Task";
 import { toDate, isToday, isThisWeek, subDays, compareAsc, startOfDay } from 'date-fns';
 
 export default class TodoList {
     constructor(){
         //initialize project holder and add twoprojec
-        this.projects = [];
-        this.projects.push(new Project("Today"));
-        this.projects.push(new Project("Overdue"));
+        this._projects = [];
+        this._projects.push(new Project("Today"));
+        this._projects.push(new Project("Overdue"));
     }
 
     //setters/getter for projects
     set projects(projects){
-        this.projects = projects;
+        this._projects = projects;
     }
     get projects(){
-        return this.projects;
+        return this._projects;
     }
 
     //get individual project
@@ -34,9 +34,16 @@ export default class TodoList {
     }
     //function to delete project
     deleteProject(projectName){
+      
+        if(projectName === "Today" || projectName === "Overdue") return;
+    
         let project = this.getProject(projectName);
-        //splixe array
-        this.projects.splice(this.projects.indexOf(project), 1);
+        let index = (this.projects.indexOf(project));
+        
+        if(index === -1) return;
+
+        //splice array
+        this.projects.splice(index, 1);
     }
 
     //function to update todays project
