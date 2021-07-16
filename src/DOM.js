@@ -1,7 +1,8 @@
 
 import Data from "./Data.js"
 import Project from "./Project.js";
-
+import Task from "./Task.js"
+import TodoList from "./TodoList.js";
 
 const content = document.getElementById("content");
 
@@ -13,6 +14,11 @@ const content = document.getElementById("content");
 export default class DOM{
     
     static loadPage(){
+        if(localStorage.getItem("todoList") === null){
+             Data.saveTodoList(new TodoList());
+        }
+       
+
         content.appendChild(DOM.createHeader());
 
         //create main  to hold rest of stuff
@@ -24,7 +30,7 @@ export default class DOM{
         sidebar.setAttribute("id", "sidebar");
         main.appendChild(DOM.createSidebar(sidebar));
 
-        main.appendChild(DOM.createTasksPage());
+        main.appendChild(DOM.createTasksPage(Data.getTodoList().getProject("Today")));
     }
 
     static createHeader(){
@@ -44,6 +50,7 @@ export default class DOM{
         today.innerHTML = "Today";
         today.classList.add("projectName")
         sidebar.appendChild(today);
+        
 
         const overdue = document.createElement("p");
         overdue.innerHTML = "Overdue";
@@ -65,13 +72,13 @@ export default class DOM{
         
     }
 
-    static createTasksPage(){
+    static createTasksPage(project){
         const tasksArea = document.createElement("div");
         tasksArea.setAttribute("id", "tasks");
 
         const currProject = document.createElement("div");
         currProject.setAttribute("id", "currProject");
-        currProject.textContent = "Today";
+        currProject.textContent = project.name;
         tasksArea.appendChild(currProject);
 
         const addTask = document.createElement("div");
@@ -95,21 +102,74 @@ export default class DOM{
         taskInput.setAttribute("placeholder", "Add a task");
         taskInput.addEventListener("keyup", function(e) {
             e.preventDefault();
+            
+            //get reference to currentProject
+            let currentProject = document.getElementById("currProject");
+        //on enter create new task            
             if(e.keyCode ===13 ){
-                Data.addProject(new Project(e.target.value));
+                // Data.addProject(e.target.value);
+                Data.addTask(currProject.textContent, new Task(e.target.value));
                 plusBtn.click();
             }
         });
         addTask.appendChild(taskInput);
 
-       
-
-
         tasksArea.appendChild(addTask);
+
+        DOM.createAllTasks(project, tasksArea);
 
         return tasksArea;
     }
     
+    static createTask(task){
+        const taskDiv = document.createElement("div");
+        taskDiv.classList.add("task");
+        
+        const delBtn = document.createElement("button");
+        delBtn.setAttribute("type", "button");
+        delBtn.id = "label";
+        delBtn.classList.add("delete");
+        delBtn.addEventListener("click", () => {
+            let currentProject = document.getElementById("currProject");
+            Data.deleteTask(currentProject.textContent,task);
+        });
+
+
+        const taskName = document.createElement("p");
+        taskName.classList.add("taskName");
+        taskName.innerHTML = task.name;
+
+        const taskDate = document.createElement("p");
+        taskDate.classList.add("taskDate");
+        taskDate.innerHTML = task.date;
+
+        taskDiv.appendChild(delBtn);
+        taskDiv.appendChild(taskName);
+        taskDiv.appendChild(taskDate);
+        return taskDiv;
+    }
+
+    static updateTasks(){
+        let project = Data.getTodoList().getProject(document.getElementById("currProject").textContent);
+        let tasksArea = document.getElementById("tasks");
+
+        DOM.deleteTasks(tasksArea);
+        DOM.createAllTasks(project, tasksArea);
+    }
+
+    static deleteTasks(tasksArea){
+        for(let i = tasksArea.childNodes.length - 1; i >= 2; i--){
+            tasksArea.removeChild(tasksArea.childNodes[i]);
+        }
+    }
+
+    static createAllTasks(project, tasksArea){
+         //call function for each task of project, and create divs for them
+         for(let i = 0; i < project.tasks.length; i++){
+            tasksArea.appendChild(DOM.createTask(project.tasks[i]));
+        }
+    }
+
     static createProject(projectName){
         const element = document.createElement("p");
 
@@ -180,8 +240,8 @@ export default class DOM{
     }
 
     static deleteProjects(sidebar){ 
-        console.log(sidebar.childNodes);
-        for(let i = sidebar.children.lenth - 1; i >= 2; i--){
+    
+        for(let i = sidebar.childNodes.length - 1; i >= 2; i--){
             sidebar.removeChild(sidebar.childNodes[i]);
             
         }

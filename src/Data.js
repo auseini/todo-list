@@ -15,20 +15,21 @@ export default class Data{
         const todoList = Object.assign(new TodoList(), JSON.parse(localStorage.getItem("todoList")));
     
         //need to populate arrays with info from local storage, otherwise it breaks
-        todoList.projects= todoList.projects
+        todoList.projects = todoList.projects
             .map((project) => Object.assign(new Project(), project));
 
-        todoList
-            .projects
-            .forEach((project) => project.tasks= 
+        todoList.projects
+            .forEach((project) => project.tasks = 
                 project.tasks.map((task) => Object.assign(new Task(), task)));
-        console.log(todoList.projects);
+       
       return todoList;
     }
     
     static addProject(name){
         const list = Data.getTodoList();
-        list.addProject(name);
+        console.log(list)
+        list.addProject(new Project(name));
+        console.log(list)
         Data.saveTodoList(list);
         DOM.updateProjects();
     }
@@ -40,10 +41,24 @@ export default class Data{
         DOM.updateProjects();
        
         console.log("delete")
-    }
-    
+    } 
     static renameProject(name){
 
         console.log("rename")
     }
+
+    static addTask(projectName, task){
+        const list = Data.getTodoList();
+        list.getProject(projectName).addTask(task);
+        Data.saveTodoList(list);
+        DOM.updateTasks();
+    }
+    static deleteTask(projectName, task){
+        const list = Data.getTodoList();
+        console.log(projectName);
+        list.getProject(projectName).removeTask(task.name);
+        Data.saveTodoList(list);
+        DOM.updateTasks();
+    }
+
 }

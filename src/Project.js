@@ -31,8 +31,18 @@ export default class Project{
 
     //func to add task
     addTask(task){
-        if(contains(this.tasks)) return;
+        if(this.contains(this.tasks)) return;
         this.tasks.push(task);
+    }
+    //func to remove task
+    removeTask(taskName){
+        //need to find task by name, otherwise objexts arent exactyl the same
+        let task = this.getTask(taskName);
+        let index = this.tasks.indexOf(task);
+        
+        if(index === -1) return;
+
+        this.tasks.splice(index, 1);
     }
     //check if task already exists
     contains(name){
