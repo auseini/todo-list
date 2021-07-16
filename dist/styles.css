@@ -140,6 +140,20 @@ p {
   opacity: 1;
   width: 95%;
 }
+.projInput {
+  width: 80%;
+  margin: 2.5%;
+  margin-left: 8.75%;
+  border: none;
+  border-bottom: 1px #363a3d solid;
+  color: white;
+  background: none;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+p.active {
+  background: #363a3d;
+}
 .task {
   width: 95%;
   margin: 0;

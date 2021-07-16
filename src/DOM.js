@@ -45,18 +45,46 @@ export default class DOM{
     
     static createSidebar(sidebar){
       
-
         const today = document.createElement("p");
         today.innerHTML = "Today";
+        today.id = "Today";
         today.classList.add("projectName")
+        today.classList.toggle("active");
+        today.addEventListener("click", (e) =>{
+            DOM.changeCurrProject(e);
+        })
         sidebar.appendChild(today);
         
 
         const overdue = document.createElement("p");
         overdue.innerHTML = "Overdue";
+        overdue.id = "Overdue";
         overdue.classList.add("projectName");
-       
+        overdue.addEventListener("click", (e) =>{
+            DOM.changeCurrProject(e);
+        })
+
+
+        const addProject = document.createElement("div");
+        addProject.id = "addProject";
+        addProject.classList.add("addTask");
+        
+        const projInput = document.createElement("input");
+        projInput.setAttribute("class", "projInput");
+
+        projInput.setAttribute("type", "text");
+        projInput.setAttribute("placeholder", "Add a project");
+        projInput.addEventListener("keyup", function(e) {
+            e.preventDefault();
+        //on enter create new task            
+            if(e.keyCode ===13 ){
+                Data.addProject(e.target.value);          
+            }
+        });
+        addProject.appendChild(projInput);
+
         sidebar.appendChild(overdue);
+        sidebar.appendChild(addProject);
         DOM.displayProjects(sidebar);
         
         return sidebar;
@@ -80,6 +108,7 @@ export default class DOM{
         currProject.setAttribute("id", "currProject");
         currProject.textContent = project.name;
         tasksArea.appendChild(currProject);
+
 
         const addTask = document.createElement("div");
         addTask.setAttribute("id", "addTask");
@@ -177,6 +206,10 @@ export default class DOM{
         element.classList.add("projectName");
         element.id = projectName;
 
+        element.addEventListener("click", (e) => {
+            DOM.changeCurrProject(e);
+        })
+
         element.addEventListener("contextmenu", (e) => {
             e.preventDefault();
 
@@ -245,6 +278,24 @@ export default class DOM{
             sidebar.removeChild(sidebar.childNodes[i]);
             
         }
+    }
+
+    static changeCurrProject(e){
+        const list = Data.getTodoList();
+        
+        let currentProject = list.getProject(document.getElementById("currProject").textContent);
+       
+        
+        //untoggle active class for current proj, then toggle active clss for clicked proj
+        document.getElementById(currentProject.name).classList.toggle("active");
+
+        let newProject = document.getElementById(e.target.textContent);
+        newProject.classList.toggle("active");
+
+        //update current project name, then call update tasks
+        document.getElementById("currProject").textContent = newProject.textContent;
+        DOM.updateTasks();
+        
     }
 }
 

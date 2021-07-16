@@ -27,9 +27,7 @@ export default class Data{
     
     static addProject(name){
         const list = Data.getTodoList();
-        console.log(list)
         list.addProject(new Project(name));
-        console.log(list)
         Data.saveTodoList(list);
         DOM.updateProjects();
     }

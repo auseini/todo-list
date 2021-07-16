@@ -30,7 +30,12 @@ export default class TodoList {
 
     //add project to projects
     addProject(project){
-        this.projects.push(project);
+        console.log(typeof this.getProject(project.name));
+        if(typeof this.getProject(project.name) != "undefined"){
+            alert("Project with name " + project.name +" already exists."); 
+            return;
+        }
+       this.projects.push(project);
     }
     //function to delete project
     deleteProject(projectName){
