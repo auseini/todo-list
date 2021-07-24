@@ -36,6 +36,21 @@ main {
   background: black;
   width: 100%;
 }
+.dateInput {
+  height: 100%;
+  background: none;
+  color: #363a3d;
+  border: none;
+}
+.dateDiv.show {
+  display: none;
+}
+.dateDiv {
+  width: 45%;
+  justify-content: right;
+  text-align: right;
+  vertical-align: middle;
+}
 #sidebar {
   width: 10%;
   background: #1e2122;
@@ -182,6 +197,9 @@ p.active {
   text-align: right;
   font-size: 12px;
   opacity: 50%;
+}
+.taskDate.show {
+  display: none;
 }
 #addTask {
   width: 95%;

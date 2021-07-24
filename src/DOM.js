@@ -109,7 +109,6 @@ export default class DOM{
         currProject.textContent = project.name;
         tasksArea.appendChild(currProject);
 
-
         const addTask = document.createElement("div");
         addTask.setAttribute("id", "addTask");
         addTask.setAttribute("class", "addTask");
@@ -151,8 +150,11 @@ export default class DOM{
     }
     
     static createTask(task){
+        let proj = document.getElementById("currProject");
+
         const taskDiv = document.createElement("div");
         taskDiv.classList.add("task");
+        
         
         const delBtn = document.createElement("button");
         delBtn.setAttribute("type", "button");
@@ -160,22 +162,65 @@ export default class DOM{
         delBtn.classList.add("delete");
         delBtn.addEventListener("click", () => {
             let currentProject = document.getElementById("currProject");
-            Data.deleteTask(currentProject.textContent,task);
+            Data.deleteTask(currentProject.textContent, task);
         });
-
 
         const taskName = document.createElement("p");
         taskName.classList.add("taskName");
         taskName.innerHTML = task.name;
-
+        
         const taskDate = document.createElement("p");
         taskDate.classList.add("taskDate");
+
         taskDate.innerHTML = task.date;
 
         taskDiv.appendChild(delBtn);
         taskDiv.appendChild(taskName);
         taskDiv.appendChild(taskDate);
+
+        if(proj && proj.textContent !== "Today" && proj.textContent !== "Overdue"){
+            let dateInput = DOM.createDateInput(task);
+
+            taskDate.addEventListener("click", (e) => {
+                e.target.parentNode.childNodes[3].classList.toggle("show");
+                e.target.classList.toggle("show");
+
+             });
+
+            taskDiv.appendChild(dateInput);
+        }
+           
         return taskDiv;
+    }
+    static createDateInput(task){
+        let div = document.createElement("div");
+        div.classList.add("dateDiv");
+        div.classList.toggle("show");
+
+        let element = document.createElement("input");
+        element.classList.add("dateInput");
+        element.setAttribute("type", "date");
+        element.id = task.name;
+        
+        element.addEventListener("change", (e) => {
+            DOM.updateDate(e);
+            DOM.updateTasks();
+
+        });
+
+        div.appendChild(element);
+       
+        return div;
+    }
+
+    static updateDate(e){
+        let list = Data.getTodoList();
+        let proj = list.getProject(document.getElementById("currProject").innerHTML);
+        let task = proj.getTask(e.target.id);
+
+        task.date = e.target.value;
+
+        Data.saveTodoList(list);
     }
 
     static updateTasks(){

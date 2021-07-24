@@ -47,7 +47,8 @@ export default class Data{
 
     static addTask(projectName, task){
         const list = Data.getTodoList();
-        list.getProject(projectName).addTask(task);
+        console.log("asdad" + projectName);
+        list.getProject(projectName).addTask(task, projectName);
         Data.saveTodoList(list);
         DOM.updateTasks();
     }

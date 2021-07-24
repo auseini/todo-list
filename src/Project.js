@@ -1,4 +1,4 @@
-import { toDate, isToday, isThisWeek, subDays } from 'date-fns';
+import { toDate, isToday,  getDate, getMonth, getYear, format } from 'date-fns';
 import Task from './Task';
 
 export default class Project{
@@ -30,8 +30,17 @@ export default class Project{
     }
 
     //func to add task
-    addTask(task){
-        if(this.contains(this.tasks)) return;
+    addTask(task, projectName){
+        
+        if(projectName === "Today"){
+            let today = new Date();
+            task.date = getYear(today) + '-' + ((+getMonth(today)) + 1) + '-' + getDate(today);
+        }
+
+        if(this.contains(task.name)){
+            alert("Task named '" + task.name + "' already exists");
+            return;
+        } 
         this.tasks.push(task);
     }
     //func to remove task

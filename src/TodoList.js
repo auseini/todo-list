@@ -32,7 +32,8 @@ export default class TodoList {
     addProject(project){
         console.log(typeof this.getProject(project.name));
         if(typeof this.getProject(project.name) != "undefined"){
-            alert("Project with name " + project.name +" already exists."); 
+            alert("Project with name '" + project.name +"' already exists."); 
+
             return;
         }
        this.projects.push(project);
@@ -55,10 +56,9 @@ export default class TodoList {
     updateToday(){
         let today = this.getProject("Today");
 
-
         //remove entries from today that are no longer today, and move them to Overdue
         today.forEach((task) => {
-           if(compareAsc(startOfDay, task.date)) {
+           if(!isToday(task.date)) {
                today.splice(today.indexOf(task), 1);
                this.getProject("Overdue").addTask(task);
            }
