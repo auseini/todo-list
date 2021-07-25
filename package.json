@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/auseini/todo-list/issues"
   },
-  "homepage": "https://github.com/auseini/todo-list/dist/main.js",
+  "homepage": "https://github.com/auseini/todo-list#readme",
   "dependencies": {
     "date-fns": "^2.22.1",
     "webpack": "^5.44.0",
