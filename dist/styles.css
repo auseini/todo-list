@@ -71,8 +71,6 @@ p {
   line-height: 40px;
 }
 
-.renameProject {
-}
 .context-menu {
   position: fixed;
   z-index: 10000;
@@ -109,8 +107,7 @@ p {
   border-radius: 5px 5px 0px 0px;
   background: #555;
 }
-.deleteProject:hover {
-}
+
 .context-menu .item i {
   display: inline-block;
   margin-right: 5px;

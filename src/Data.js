@@ -37,24 +37,34 @@ export default class Data{
         list.deleteProject(name);
         Data.saveTodoList(list);
         DOM.updateProjects();
-       
-        console.log("delete")
+
     } 
     static renameProject(name){
+        const list = Data.getTodoList();
+        let newName = prompt("Please enter a new name", name);
+        
 
-        console.log("rename")
+        if(typeof list.getProject(newName) === "undefined"){
+           const project = list.getProject(name);
+            project.name = newName;
+
+            Data.saveTodoList(list);  
+            DOM.updateProjects();
+            document.getElementById(newName).click(); 
+        } else{
+            alert("Project with name '" + newName + "' already exists.");
+        }
+        
     }
 
     static addTask(projectName, task){
         const list = Data.getTodoList();
-        console.log("asdad" + projectName);
         list.getProject(projectName).addTask(task, projectName);
         Data.saveTodoList(list);
         DOM.updateTasks();
     }
     static deleteTask(projectName, task){
         const list = Data.getTodoList();
-        console.log(projectName);
         list.getProject(projectName).removeTask(task.name);
         Data.saveTodoList(list);
         DOM.updateTasks();

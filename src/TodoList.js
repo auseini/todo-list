@@ -1,6 +1,5 @@
 import Project from "./Project";
-import Task from "./Task";
-import { toDate, isToday, isThisWeek, subDays, compareAsc, startOfDay } from 'date-fns';
+import { getYear, getDate, getMonth } from 'date-fns';
 
 export default class TodoList {
     constructor(){
@@ -55,28 +54,19 @@ export default class TodoList {
     //function to update todays project
     updateToday(){
         let today = this.getProject("Today");
+        let date = new Date();
+
+        let testDate = getYear(date) + '-' + ((+getMonth(date)) + 1) + '-' + getDate(date);
+        
 
         //remove entries from today that are no longer today, and move them to Overdue
-        today.forEach((task) => {
-           if(!isToday(task.date)) {
-               today.splice(today.indexOf(task), 1);
+        today.tasks.forEach((task) => {
+           if(task.date !== testDate) {
+               today.tasks.splice(today.tasks.indexOf(task), 1);
                this.getProject("Overdue").addTask(task);
            }
         });
 
-
-        this.projects.array.forEach(project => {
-            if(project.name === "Today" || project.name === "Overdue")
-                return;
-            //loop through all projects and add todays tasks if they arent already in project
-            project.forEach((task) => {
-                if (isToday(task.date)){
-                    if(!today.contains(task)){
-                        today.addTask(task);
-                    }
-                }
-            })
-        });
     }
 
 }

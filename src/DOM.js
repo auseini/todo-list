@@ -1,24 +1,20 @@
 
 import Data from "./Data.js"
-import Project from "./Project.js";
 import Task from "./Task.js"
 import TodoList from "./TodoList.js";
-
-const content = document.getElementById("content");
-
-
-
-
-
 
 export default class DOM{
     
     static loadPage(){
+        
         if(localStorage.getItem("todoList") === null){
-             Data.saveTodoList(new TodoList());
+            Data.saveTodoList(new TodoList());
         }
-       
+        let list = Data.getTodoList();
+        list.updateToday();
+        Data.saveTodoList(list);
 
+        const content = document.getElementById("content");
         content.appendChild(DOM.createHeader());
 
         //create main  to hold rest of stuff
@@ -77,9 +73,11 @@ export default class DOM{
         projInput.addEventListener("keyup", function(e) {
             e.preventDefault();
         //on enter create new task            
-            if(e.keyCode ===13 ){
-                Data.addProject(e.target.value);          
+            if(e.keyCode === 13 ){
+                Data.addProject(e.target.value);      
+                document.getElementById(e.target.value).click();
             }
+            
         });
         addProject.appendChild(projInput);
 
@@ -94,7 +92,6 @@ export default class DOM{
         //create project object for each project in todolist
         let list = Data.getTodoList().projects;
         for(let i = 2; i < list.length; i++){
-            
            sidebar.appendChild(DOM.createProject(list[i].name));
         }
         
@@ -182,9 +179,11 @@ export default class DOM{
             let dateInput = DOM.createDateInput(task);
 
             taskDate.addEventListener("click", (e) => {
-                e.target.parentNode.childNodes[3].classList.toggle("show");
-                e.target.classList.toggle("show");
+                let input = e.target.parentNode.childNodes[3];
+                input.classList.toggle("show");           
 
+                e.target.classList.toggle("show");
+            
              });
 
             taskDiv.appendChild(dateInput);
@@ -201,11 +200,10 @@ export default class DOM{
         element.classList.add("dateInput");
         element.setAttribute("type", "date");
         element.id = task.name;
-        
+        element.value = task.date
         element.addEventListener("change", (e) => {
             DOM.updateDate(e);
             DOM.updateTasks();
-
         });
 
         div.appendChild(element);
@@ -297,6 +295,8 @@ export default class DOM{
         item.style.borderRadius = "0px 0px 5px 5px";
         item.addEventListener("click", () =>{
             Data.deleteProject(name);
+            document.getElementById("currProject").textContent = "Today"
+            DOM.updateTasks();
         });
         
         menu.appendChild(item);
@@ -306,7 +306,6 @@ export default class DOM{
             if( document.getElementById("context-menu")){
                 document.getElementById("context-menu").remove();
             }
-            
         }, {once: true});
         return menu;
     }
@@ -321,7 +320,6 @@ export default class DOM{
     
         for(let i = sidebar.childNodes.length - 1; i >= 2; i--){
             sidebar.removeChild(sidebar.childNodes[i]);
-            
         }
     }
 

@@ -1,5 +1,4 @@
-import { toDate, isToday,  getDate, getMonth, getYear, format } from 'date-fns';
-import Task from './Task';
+import { toDate, isToday,  getDate, getMonth, getYear } from 'date-fns';
 
 export default class Project{
     constructor(name){
